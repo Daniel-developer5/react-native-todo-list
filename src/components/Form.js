@@ -2,7 +2,10 @@ import React, { useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 import { TextInput, Button } from 'react-native-paper'
 
-const Form = ({ addTodo, }) => {
+const Form = ({ 
+    addTodo, setSearchText, 
+    searching, searchText,
+}) => {
     const [todo, setTodo] = useState('')
     const [disabled, setDisabled] = useState(true)
 
@@ -14,28 +17,32 @@ const Form = ({ addTodo, }) => {
 
     const onInput = text => {
         setTodo(text)
-        setDisabled(!Boolean(text))
+        setDisabled(!Boolean(text.trim()))
     }
+
+    const onSearch = text => setSearchText(text)
 
     return (
         <View style={styles.block}>
             <TextInput 
                 style={styles.input} 
                 mode='outlined' 
-                label='Todo'
+                label={!searching ? 'Todo' : 'Search'}
                 underlineColor='#3949ab'
-                onChangeText={onInput}
-                value={todo}
+                onChangeText={!searching ? onInput : onSearch}
+                value={!searching ? todo : searchText}
                 autoCorrect={false}
                 autoCapitalize='none'
                 onSubmitEditing={onAdd}
             />
-            <Button 
-                mode='contained' 
-                style={styles.button}
-                onPress={onAdd}
-                disabled={disabled}
-            >Add Todo</Button>
+            {!searching &&
+                <Button 
+                    mode='contained' 
+                    style={styles.button}
+                    onPress={onAdd}
+                    disabled={disabled}
+                >Add Todo</Button>
+            }
         </View>
     )
 }
@@ -47,14 +54,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     input: {
-        marginRight: 10,
-        width: '65%',
+        flexGrow: 1,
     },
     button: {
         justifyContent: 'center',
         height: 60,
         marginTop: 5,
-        flexGrow: 1,
+        width: '35%',
+        marginLeft: 10,
+    },
+    searchButton: {
+        marginLeft: 5,
     }
 })
 

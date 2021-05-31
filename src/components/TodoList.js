@@ -23,7 +23,8 @@ const TodoList = ({
 
 const styles = StyleSheet.create({
     block: {
-        paddingVertical: 20,
+        paddingTop: 20,
+        paddingBottom: 60,
     },
 })
 
